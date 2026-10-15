@@ -1,24 +1,25 @@
 package com.georgiytitov.movieexplorer.data
 
 import com.georgiytitov.movieexplorer.data.local.MovieDao
+import com.georgiytitov.movieexplorer.data.local.MovieEntity
 import com.georgiytitov.movieexplorer.data.local.toDomain
 import com.georgiytitov.movieexplorer.data.local.toEntity
-import com.georgiytitov.movieexplorer.data.remote.NetworkMonitor
 import com.georgiytitov.movieexplorer.data.remote.backend.BackendApi
 import com.georgiytitov.movieexplorer.data.remote.backend.dto.AddFavoriteDto
+import com.georgiytitov.movieexplorer.data.remote.backend.dto.BackendMovieDto
+import com.georgiytitov.movieexplorer.data.remote.network.NetworkMonitor
 import com.georgiytitov.movieexplorer.domain.model.Movie
 import com.georgiytitov.movieexplorer.domain.repository.FavoritesRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import retrofit2.HttpException
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
-class DefaultFavoritesRepository(
+internal class DefaultFavoritesRepository(
     private val dao: MovieDao,
     private val backend: BackendApi,
     private val userId: String,
@@ -26,49 +27,38 @@ class DefaultFavoritesRepository(
     private val scope: CoroutineScope,
 ) : FavoritesRepository {
     private val synchronization = Mutex()
-    override val favorites = dao.observeFavorites().map { movies -> movies.map { it.toDomain() } }
+    private val mutableSyncFailed = MutableStateFlow(false)
+    override val syncFailed = mutableSyncFailed.asStateFlow()
 
-    override suspend fun setFavorite(
-        movie: Movie,
-        favorite: Boolean,
-    ) {
-        dao.setFavorite(movie.toEntity(), favorite)
+    override val favorites = dao.observeFavorites().map { movies ->
+        movies.map(MovieEntity::toDomain)
+    }
+
+    override suspend fun toggleFavorite(movie: Movie) {
+        dao.toggleFavorite(movie.toEntity())
         scope.launch { synchronize() }
     }
 
     override suspend fun synchronize() {
-        if (!network.online.value) {
-            return
-        }
         synchronization.withLock {
-            for (change in dao.pendingFavorites()) {
-                try {
-                    if (change.desired) {
-                        try {
-                            backend.addFavorite(userId, AddFavoriteDto(change.movieId))
-                        } catch (e: HttpException) {
-                            if (e.code() != HTTP_BAD_REQUEST ||
-                                backend.favorites(userId).none { it.id == change.movieId }
-                            ) {
-                                throw e
-                            }
-                        }
-                    } else {
-                        try {
-                            backend.removeFavorite(userId, change.movieId)
-                        } catch (e: HttpException) {
-                            if (e.code() != HTTP_NOT_FOUND) {
-                                throw e
-                            }
-                        }
-                    }
-                    dao.acknowledgeFavorite(change.movieId, change.modifiedAt, change.desired)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    // Local state is already durable. Retry pending changes on the next connection.
-                    break
+            if (!network.online.value) {
+                mutableSyncFailed.value = true
+                return@withLock
+            }
+            try {
+                val localIds = dao.favoriteIds().toSet()
+                val remoteIds = backend.favorites(userId).map(BackendMovieDto::id).toSet()
+                for (id in localIds - remoteIds) {
+                    backend.addFavorite(userId, AddFavoriteDto(id))
                 }
+                for (id in remoteIds - localIds) {
+                    backend.removeFavorite(userId, id)
+                }
+                mutableSyncFailed.value = false
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                mutableSyncFailed.value = true
             }
         }
     }

@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface TmdbApi {
+internal interface TmdbApi {
     @GET("movie/{tab}")
     suspend fun movies(
         @Path("tab") tab: String,

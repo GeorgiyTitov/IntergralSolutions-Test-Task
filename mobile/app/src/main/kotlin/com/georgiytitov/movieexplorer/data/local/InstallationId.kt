@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import java.util.UUID
 
-class InstallationId(
+internal class InstallationId(
     context: Context,
 ) {
     private val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)

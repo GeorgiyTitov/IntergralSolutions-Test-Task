@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "522e9dbc04f271b4211151e6877bad41",
+    "identityHash": "3b6e4e95137a249224f067255ada29ca",
     "entities": [
       {
         "tableName": "movies",
@@ -90,7 +90,7 @@
       },
       {
         "tableName": "favorites",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `desired` INTEGER NOT NULL, `pending` INTEGER NOT NULL, `modifiedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`movieId` INTEGER NOT NULL, `savedAt` INTEGER NOT NULL, PRIMARY KEY(`movieId`))",
         "fields": [
           {
             "fieldPath": "movieId",
@@ -99,20 +99,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "desired",
-            "columnName": "desired",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "pending",
-            "columnName": "pending",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "modifiedAt",
-            "columnName": "modifiedAt",
+            "fieldPath": "savedAt",
+            "columnName": "savedAt",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -127,7 +115,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '522e9dbc04f271b4211151e6877bad41')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3b6e4e95137a249224f067255ada29ca')"
     ]
   }
 }

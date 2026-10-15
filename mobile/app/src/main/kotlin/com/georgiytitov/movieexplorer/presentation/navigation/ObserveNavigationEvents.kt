@@ -1,6 +1,9 @@
 package com.georgiytitov.movieexplorer.presentation.navigation
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -12,9 +15,7 @@ fun ObserveNavigationEvents(
     onNavigate: (NavigationEvent) -> Unit,
 ) {
     val owner = LocalLifecycleOwner.current
-    val currentHandler by rememberUpdatedState(
-        newValue = onNavigate,
-    )
+    val currentHandler by rememberUpdatedState(newValue = onNavigate)
     LaunchedEffect(
         key1 = events,
         key2 = owner,

@@ -5,4 +5,9 @@ data class MoviePage(
     val totalPages: Int,
     val movies: List<Movie>,
     val origin: DataOrigin,
-)
+) {
+    companion object {
+        const val FIRST_PAGE = 1
+        const val NEXT_PAGE_STEP = 1
+    }
+}

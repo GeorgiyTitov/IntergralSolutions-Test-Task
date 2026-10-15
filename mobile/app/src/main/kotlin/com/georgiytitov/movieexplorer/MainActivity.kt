@@ -34,17 +34,7 @@ class MainActivity : ComponentActivity() {
 
     private fun showApp() {
         val graph = (application as MovieApplication).graph
-        setContent(
-            content = {
-                MovieTheme(
-                    content = {
-                        MovieApp(
-                            graph = graph,
-                        )
-                    },
-                )
-            },
-        )
+        setContent(content = { MovieTheme(content = { MovieApp(graph = graph) }) })
     }
 
     private companion object {

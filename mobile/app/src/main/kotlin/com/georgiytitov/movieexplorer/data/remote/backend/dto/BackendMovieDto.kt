@@ -1,6 +1,6 @@
 package com.georgiytitov.movieexplorer.data.remote.backend.dto
 
-data class BackendMovieDto(
+internal data class BackendMovieDto(
     val id: Long,
     val title: String?,
     val posterPath: String?,

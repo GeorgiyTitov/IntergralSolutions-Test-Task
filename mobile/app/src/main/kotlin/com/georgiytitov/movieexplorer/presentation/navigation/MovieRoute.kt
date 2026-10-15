@@ -1,6 +1,6 @@
 package com.georgiytitov.movieexplorer.presentation.navigation
 
-enum class MovieRoute(
+internal enum class MovieRoute(
     val path: String,
 ) {
     MOVIES("browse"),

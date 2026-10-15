@@ -1,11 +1,12 @@
 package com.georgiytitov.movieexplorer.data.remote.backend
 
-import com.georgiytitov.movieexplorer.data.remote.MovieDataSource
-import com.georgiytitov.movieexplorer.domain.model.DataOrigin
+import com.georgiytitov.movieexplorer.data.remote.backend.dto.BackendMovieDto
+import com.georgiytitov.movieexplorer.data.remote.source.MovieDataSource
+import com.georgiytitov.movieexplorer.domain.model.DataOrigin.BACKEND
 import com.georgiytitov.movieexplorer.domain.model.MoviePage
 import com.georgiytitov.movieexplorer.domain.model.MovieTab
 
-class BackendDataSource(
+internal class BackendDataSource(
     private val api: BackendApi,
 ) : MovieDataSource {
     override suspend fun movies(
@@ -16,10 +17,10 @@ class BackendDataSource(
         return MoviePage(
             page = response.page,
             totalPages = response.totalPages,
-            movies = response.movies.map { it.toDomain() },
-            origin = DataOrigin.BACKEND,
+            movies = response.movies.map(BackendMovieDto::toDomain),
+            origin = BACKEND,
         )
     }
 
-    override suspend fun movie(id: Long) = api.movie(id).toDomain() to DataOrigin.BACKEND
+    override suspend fun movie(id: Long) = api.movie(id).toDomain() to BACKEND
 }

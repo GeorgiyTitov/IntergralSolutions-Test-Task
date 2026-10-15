@@ -1,3 +1,7 @@
 package com.georgiytitov.movieexplorer.domain.model
 
-enum class DataOrigin { BACKEND, TMDB, CACHE }
+enum class DataOrigin {
+    BACKEND,
+    TMDB,
+    CACHE,
+}

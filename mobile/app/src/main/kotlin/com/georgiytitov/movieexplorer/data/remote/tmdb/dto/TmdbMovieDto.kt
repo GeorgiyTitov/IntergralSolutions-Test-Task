@@ -2,7 +2,7 @@ package com.georgiytitov.movieexplorer.data.remote.tmdb.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class TmdbMovieDto(
+internal data class TmdbMovieDto(
     val id: Long,
     val title: String?,
     @SerializedName("poster_path") val posterPath: String?,

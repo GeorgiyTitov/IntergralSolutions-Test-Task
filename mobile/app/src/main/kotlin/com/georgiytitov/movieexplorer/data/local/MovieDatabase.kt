@@ -8,6 +8,6 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = true,
 )
-abstract class MovieDatabase : RoomDatabase() {
+internal abstract class MovieDatabase : RoomDatabase() {
     abstract fun movies(): MovieDao
 }

@@ -3,9 +3,14 @@ package com.georgiytitov.movieexplorer.data.remote.backend
 import com.georgiytitov.movieexplorer.data.remote.backend.dto.AddFavoriteDto
 import com.georgiytitov.movieexplorer.data.remote.backend.dto.BackendMovieDto
 import com.georgiytitov.movieexplorer.data.remote.backend.dto.BackendPageDto
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
-interface BackendApi {
+internal interface BackendApi {
     @GET("movies")
     suspend fun movies(
         @Query("tab") tab: String,

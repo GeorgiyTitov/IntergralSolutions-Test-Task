@@ -5,8 +5,6 @@ import com.georgiytitov.movieexplorer.di.AppGraph
 import com.georgiytitov.movieexplorer.presentation.navigation.MovieNavHost
 
 @Composable
-fun MovieApp(graph: AppGraph) {
-    MovieNavHost(
-        graph = graph,
-    )
+internal fun MovieApp(graph: AppGraph) {
+    MovieNavHost(graph = graph)
 }

@@ -1,3 +1,57 @@
 <resources>
     <string name="app_name">Movie Explorer</string>
+    <string name="movies">Movies</string>
+    <string name="favorites">Favorites</string>
+    <string name="movie_details">Movie details</string>
+    <string name="now_playing">Now playing</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="top_rated">Top rated</string>
+    <string name="back_to_movies">Back to movies</string>
+    <string name="refresh_movies">Refresh movies</string>
+    <string name="movies_updated">Movies updated</string>
+    <string name="refresh_cached_movies">
+        Couldn’t reach movie services. Showing saved movies.
+    </string>
+    <string name="no_movies">No movies yet</string>
+    <string name="movies_unavailable">Movies unavailable</string>
+    <string name="empty_movies">Try another tab, or check again later.</string>
+    <string name="load_movies_error">
+        Couldn’t load movies. Check your connection and try again.
+    </string>
+    <string name="load_more_error">Couldn’t load more</string>
+    <string name="details_unavailable">Details unavailable</string>
+    <string name="movie_not_found">This movie could not be found.</string>
+    <string name="load_details_error">
+        Movie details are unavailable. Check your connection and try again.
+    </string>
+    <string name="release_tba">Release TBA</string>
+    <string name="release_date_tba">Release date TBA</string>
+    <string name="overview">Overview</string>
+    <string name="no_description">No description available yet.</string>
+    <string name="description_coming_soon">Description coming soon.</string>
+    <string name="tmdb_attribution">Movie data provided by TMDB</string>
+    <string name="no_poster">No poster</string>
+    <string name="poster_unavailable">Poster unavailable</string>
+    <string name="untitled">Untitled</string>
+    <string name="try_again">Try again</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="save_to_favorites">Save to favorites</string>
+    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="empty_favorites_title">Your favorites live here</string>
+    <string name="empty_favorites_message">
+        Tap the heart on a movie to save it. Your favorites stay available offline.
+    </string>
+    <string name="read_favorites_error">Couldn’t read saved favorites.</string>
+    <string name="save_favorite_error">Couldn’t save this change. Please try again.</string>
+    <string name="sync_favorites_error">
+        Favorites saved on this device. Couldn’t sync with the server.
+    </string>
+    <string name="offline_message">
+        You’re offline · saved movies and favorites are available
+    </string>
+    <string name="direct_tmdb_message">Backend unavailable · connected directly to TMDB</string>
+    <string name="cached_message">Movie services unavailable · showing saved content</string>
+    <string name="poster_description">Poster for %1$s</string>
+    <string name="rating_out_of_ten">★ %1$.1f / 10</string>
+    <string name="movie_metadata">%1$s · ★ %2$.1f</string>
 </resources>

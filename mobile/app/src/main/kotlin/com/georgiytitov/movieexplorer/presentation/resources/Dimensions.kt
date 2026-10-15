@@ -3,6 +3,7 @@ package com.georgiytitov.movieexplorer.presentation.resources
 import androidx.compose.ui.unit.dp
 
 object Dimensions {
+    const val MOVIE_CARD_TEXT_WEIGHT = 1f
     val SMALL_SPACING = 8.dp
     val MEDIUM_SPACING = 12.dp
     val LARGE_SPACING = 16.dp
@@ -18,4 +19,5 @@ object Dimensions {
     val DETAIL_POSTER_HEIGHT = 330.dp
     val DETAIL_POSTER_CORNER_RADIUS = 24.dp
     val BANNER_VERTICAL_PADDING = 10.dp
+    val REFRESH_INDICATOR_SIZE = 24.dp
 }

@@ -1,35 +1,37 @@
 package com.georgiytitov.movieexplorer.presentation.navigation
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.georgiytitov.movieexplorer.di.AppGraph
-import com.georgiytitov.movieexplorer.presentation.components.MovieBottomBar
-import com.georgiytitov.movieexplorer.presentation.details.DetailsScreenView
-import com.georgiytitov.movieexplorer.presentation.favorites.FavoritesScreenView
-import com.georgiytitov.movieexplorer.presentation.movies.MoviesScreenView
-import com.georgiytitov.movieexplorer.presentation.resources.Motion
+import com.georgiytitov.movieexplorer.presentation.components.layout.MovieBottomBar
+import com.georgiytitov.movieexplorer.presentation.navigation.MovieRoute.DETAILS
+import com.georgiytitov.movieexplorer.presentation.navigation.MovieRoute.FAVORITES
+import com.georgiytitov.movieexplorer.presentation.navigation.MovieRoute.MOVIES
+import com.georgiytitov.movieexplorer.presentation.screens.details.compose.DetailsScreenView
+import com.georgiytitov.movieexplorer.presentation.screens.favorites.compose.FavoritesScreenView
+import com.georgiytitov.movieexplorer.presentation.screens.movies.compose.MoviesScreenView
 
 @Composable
-fun MovieNavHost(graph: AppGraph) {
+internal fun MovieNavHost(graph: AppGraph) {
     val nav = rememberNavController()
     val entry by nav.currentBackStackEntryAsState()
     val currentRoute = entry?.destination?.route
     val navigate: (NavigationEvent) -> Unit = { event ->
         when (event) {
             is NavigationEvent.OpenMovie -> {
-                nav.navigate(
-                    MovieRoute.DETAILS.withMovieId(movieId = event.movieId),
-                )
+                nav.navigate(DETAILS.withMovieId(movieId = event.movieId))
             }
 
             NavigationEvent.Back -> nav.popBackStack()
@@ -38,9 +40,9 @@ fun MovieNavHost(graph: AppGraph) {
     Scaffold(
         contentWindowInsets = WindowInsets(),
         bottomBar = {
-            if (currentRoute != MovieRoute.DETAILS.path) {
+            if (currentRoute != DETAILS.path) {
                 MovieBottomBar(
-                    favoritesSelected = currentRoute == MovieRoute.FAVORITES.path,
+                    favoritesSelected = currentRoute == FAVORITES.path,
                     openTab = { route ->
                         nav.navigate(route) {
                             popUpTo(nav.graph.findStartDestination().id) { saveState = true }
@@ -54,31 +56,17 @@ fun MovieNavHost(graph: AppGraph) {
         content = { padding ->
             NavHost(
                 navController = nav,
-                startDestination = MovieRoute.MOVIES.path,
+                startDestination = MOVIES.path,
                 modifier = Modifier
                     .padding(paddingValues = padding)
                     .consumeWindowInsets(paddingValues = padding),
-                enterTransition = {
-                    slideInHorizontally(
-                        animationSpec = tween(durationMillis = Motion.ENTER_DURATION_MILLIS),
-                        initialOffsetX = { it / Motion.HORIZONTAL_OFFSET_DIVISOR },
-                    ) + fadeIn(animationSpec = tween(durationMillis = Motion.ENTER_DURATION_MILLIS))
-                },
-                exitTransition = {
-                    fadeOut(animationSpec = tween(durationMillis = Motion.EXIT_DURATION_MILLIS))
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(durationMillis = Motion.ENTER_DURATION_MILLIS))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(
-                        animationSpec = tween(durationMillis = Motion.ENTER_DURATION_MILLIS),
-                        targetOffsetX = { it / Motion.HORIZONTAL_OFFSET_DIVISOR },
-                    ) + fadeOut(animationSpec = tween(durationMillis = Motion.EXIT_DURATION_MILLIS))
-                },
+                enterTransition = { MovieTransitions.enter },
+                exitTransition = { MovieTransitions.exit },
+                popEnterTransition = { MovieTransitions.popEnter },
+                popExitTransition = { MovieTransitions.popExit },
                 builder = {
                     composable(
-                        route = MovieRoute.MOVIES.path,
+                        route = MOVIES.path,
                         content = {
                             MoviesScreenView(
                                 graph = graph,
@@ -87,7 +75,7 @@ fun MovieNavHost(graph: AppGraph) {
                         },
                     )
                     composable(
-                        route = MovieRoute.FAVORITES.path,
+                        route = FAVORITES.path,
                         content = {
                             FavoritesScreenView(
                                 graph = graph,
@@ -96,7 +84,7 @@ fun MovieNavHost(graph: AppGraph) {
                         },
                     )
                     composable(
-                        route = MovieRoute.DETAILS.path,
+                        route = DETAILS.path,
                         arguments = listOf(
                             navArgument(MovieRoute.MOVIE_ID) { type = NavType.LongType },
                         ),
