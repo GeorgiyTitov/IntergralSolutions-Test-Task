@@ -9,6 +9,15 @@ import okhttp3.OkHttpClient
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+private const val CACHE_DIRECTORY = "posters"
+private const val CACHE_SIZE_BYTES = 100L * 1024 * 1024
+private const val CACHE_TTL_SECONDS = 86_400
+private const val CONNECT_TIMEOUT_SECONDS = 5L
+private const val READ_TIMEOUT_SECONDS = 10L
+private const val CACHE_CONTROL_HEADER = "Cache-Control"
+private const val EXPIRES_HEADER = "Expires"
+private const val CACHE_CONTROL_VALUE = "public, max-age=$CACHE_TTL_SECONDS"
+
 /** Source bytes expire after 24 hours online; cached posters remain usable offline. */
 fun posterImageLoader(
     context: Context,
@@ -17,9 +26,9 @@ fun posterImageLoader(
     val client =
         OkHttpClient
             .Builder()
-            .cache(Cache(File(context.cacheDir, "posters"), 100L * 1024 * 1024))
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
+            .cache(Cache(File(context.cacheDir, CACHE_DIRECTORY), CACHE_SIZE_BYTES))
+            .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val request =
                     if (network.online.value) {
@@ -43,8 +52,8 @@ fun posterImageLoader(
                 chain
                     .proceed(chain.request())
                     .newBuilder()
-                    .header("Cache-Control", "public, max-age=86400")
-                    .removeHeader("Expires")
+                    .header(CACHE_CONTROL_HEADER, CACHE_CONTROL_VALUE)
+                    .removeHeader(EXPIRES_HEADER)
                     .build()
             }.build()
     // One HTTP disk cache owns expiry. Disabling Coil's parallel caches avoids bypassing it.

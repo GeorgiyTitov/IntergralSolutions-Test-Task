@@ -9,10 +9,8 @@ class TmdbAuthenticationInterceptor(
     private val apiKey: String,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (token.isBlank() &&
-            apiKey.isBlank()
-        ) {
-            throw IOException("Configure TMDB credentials in .env and rebuild the app.")
+        if (token.isBlank() && apiKey.isBlank()) {
+            throw IOException(MISSING_CREDENTIALS_ERROR)
         }
         val request =
             chain
@@ -20,18 +18,26 @@ class TmdbAuthenticationInterceptor(
                 .newBuilder()
                 .apply {
                     if (token.isNotBlank()) {
-                        header("Authorization", "Bearer $token")
+                        header(AUTHORIZATION_HEADER, "$BEARER_SCHEME $token")
                     } else {
                         url(
                             chain
                                 .request()
                                 .url
                                 .newBuilder()
-                                .addQueryParameter("api_key", apiKey)
+                                .addQueryParameter(API_KEY_PARAMETER, apiKey)
                                 .build(),
                         )
                     }
                 }.build()
         return chain.proceed(request)
+    }
+
+    private companion object {
+        const val AUTHORIZATION_HEADER = "Authorization"
+        const val BEARER_SCHEME = "Bearer"
+        const val API_KEY_PARAMETER = "api_key"
+        const val MISSING_CREDENTIALS_ERROR =
+            "Configure TMDB credentials in .env and rebuild the app."
     }
 }

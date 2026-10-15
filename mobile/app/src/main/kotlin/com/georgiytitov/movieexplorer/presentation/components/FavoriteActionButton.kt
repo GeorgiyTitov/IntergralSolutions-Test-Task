@@ -35,7 +35,11 @@ fun FavoriteActionButton(
                     .width(width = Dimensions.SMALL_SPACING),
             )
             Text(
-                text = if (selected) Strings.REMOVE_FROM_FAVORITES else Strings.SAVE_TO_FAVORITES,
+                text = if (selected) {
+                    Strings.REMOVE_FROM_FAVORITES
+                } else {
+                    Strings.SAVE_TO_FAVORITES
+                },
             )
         },
     )

@@ -51,5 +51,10 @@ object Strings {
     fun movieMetadata(
         year: String,
         ratingValue: Double,
-    ) = listOf(year.ifBlank { RELEASE_TBA }, rating(value = ratingValue)).joinToString("  ·  ")
+    ): String {
+        return listOf(year.ifBlank { RELEASE_TBA }, rating(value = ratingValue))
+            .joinToString(METADATA_SEPARATOR)
+    }
+
+    private const val METADATA_SEPARATOR = "  ·  "
 }

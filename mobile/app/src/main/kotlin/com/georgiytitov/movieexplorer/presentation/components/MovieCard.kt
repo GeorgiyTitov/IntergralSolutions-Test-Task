@@ -14,6 +14,9 @@ import com.georgiytitov.movieexplorer.domain.model.Movie
 import com.georgiytitov.movieexplorer.presentation.resources.Dimensions
 import com.georgiytitov.movieexplorer.presentation.resources.Strings
 
+private const val TITLE_MAX_LINES = 2
+private const val OVERVIEW_MAX_LINES = 2
+
 @Composable
 fun MovieCard(
     movie: Movie,
@@ -56,7 +59,7 @@ fun MovieCard(
                                     movie.title.ifBlank { Strings.UNTITLED },
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                maxLines = 2,
+                                maxLines = TITLE_MAX_LINES,
                                 overflow = TextOverflow.Ellipsis,
                             )
                             Text(
@@ -71,7 +74,7 @@ fun MovieCard(
                             Text(
                                 text =
                                     movie.overview.ifBlank { Strings.DESCRIPTION_COMING_SOON },
-                                maxLines = 2,
+                                maxLines = OVERVIEW_MAX_LINES,
                                 overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,

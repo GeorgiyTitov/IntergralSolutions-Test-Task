@@ -8,12 +8,13 @@ public enum MovieTab {
   upcoming,
   top_rated;
 
+  private static final String INVALID_TAB = "tab must be now_playing, upcoming or top_rated";
+
   public static MovieTab parse(String value) {
     try {
       return valueOf(value);
     } catch (IllegalArgumentException ex) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST, "tab must be now_playing, upcoming or top_rated");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TAB);
     }
   }
 }

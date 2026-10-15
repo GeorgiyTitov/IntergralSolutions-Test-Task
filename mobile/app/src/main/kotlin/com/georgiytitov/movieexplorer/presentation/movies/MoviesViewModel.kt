@@ -38,7 +38,9 @@ class MoviesViewModel(
             }
 
             is MoviesEvent.SelectTab -> {
-                if (state.value.tab == event.tab) return
+                if (state.value.tab == event.tab) {
+                    return
+                }
                 request?.cancel()
                 mutableState.value = MoviesState(tab = event.tab)
                 load(refresh = true)
@@ -62,26 +64,29 @@ class MoviesViewModel(
 
     private fun load(refresh: Boolean) {
         val tab = state.value.tab
-        val page = if (refresh) 1 else state.value.nextPage
+        val page = if (refresh) {
+            1
+        } else {
+            state.value.nextPage
+        }
         mutableState.update { it.copy(loading = refresh, loadingMore = !refresh, error = null) }
         request =
             viewModelScope.launch {
                 try {
-                    if (refresh &&
-                        state.value.movies.isEmpty()
-                    ) {
+                    if (refresh && state.value.movies.isEmpty()) {
                         repository.cachedMovies(tab, 1)?.let { cached ->
                             mutableState.update { it.copy(movies = cached.movies) }
                         }
                     }
                     val result = repository.movies(tab, page)
-                    mutableState.update {
-                        it.copy(
-                            movies =
-                                (if (refresh) result.movies else it.movies + result.movies)
-                                    .distinctBy(
-                                        Movie::id,
-                                    ),
+                    mutableState.update { current ->
+                        val movies = if (refresh) {
+                            result.movies
+                        } else {
+                            current.movies + result.movies
+                        }
+                        current.copy(
+                            movies = movies.distinctBy(Movie::id),
                             loading = false,
                             loadingMore = false,
                             nextPage = result.page + 1,

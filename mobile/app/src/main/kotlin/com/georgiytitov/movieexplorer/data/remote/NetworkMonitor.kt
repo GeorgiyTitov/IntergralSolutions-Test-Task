@@ -29,15 +29,14 @@ class NetworkMonitor(
                     network: Network,
                     capabilities: NetworkCapabilities,
                 ) {
-                    mutableOnline.value =
-                        isOnline()
+                    mutableOnline.value = isOnline()
                 }
             },
         )
     }
 
-    private fun isOnline() =
-        manager
-            .getNetworkCapabilities(manager.activeNetwork)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+    private fun isOnline(): Boolean {
+        val capabilities = manager.getNetworkCapabilities(manager.activeNetwork)
+        return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+    }
 }

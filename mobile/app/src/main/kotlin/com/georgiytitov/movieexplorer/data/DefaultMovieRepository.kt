@@ -28,7 +28,7 @@ class DefaultMovieRepository(
         val saved = dao.page(tab.apiValue, page) ?: return null
         val ids =
             saved.movieIds
-                .split(',')
+                .split(MOVIE_ID_SEPARATOR)
                 .mapNotNull(String::toLongOrNull)
         val movies =
             dao
@@ -44,10 +44,7 @@ class DefaultMovieRepository(
         )
     }
 
-    override suspend fun cachedMovie(id: Long) =
-        dao
-            .movie(id)
-            ?.toDomain()
+    override suspend fun cachedMovie(id: Long) = dao.movie(id)?.toDomain()
 
     override suspend fun movies(
         tab: MovieTab,
@@ -55,7 +52,7 @@ class DefaultMovieRepository(
     ): MoviePage {
         try {
             if (!network.online.value) {
-                throw IOException("Offline")
+                throw IOException(OFFLINE_ERROR)
             }
             val result = remote.movies(tab, page)
             dao.cache(
@@ -63,11 +60,7 @@ class DefaultMovieRepository(
                     tab.apiValue,
                     result.page,
                     result.totalPages,
-                    result.movies.joinToString(
-                        ",",
-                    ) {
-                        it.id.toString()
-                    },
+                    result.movies.joinToString(MOVIE_ID_SEPARATOR) { it.id.toString() },
                 ),
                 result.movies.map { it.toEntity() },
             )
@@ -84,7 +77,7 @@ class DefaultMovieRepository(
     override suspend fun movie(id: Long): Pair<Movie, DataOrigin> {
         try {
             if (!network.online.value) {
-                throw IOException("Offline")
+                throw IOException(OFFLINE_ERROR)
             }
             val result = remote.movie(id)
             dao.putMovie(result.first.toEntity())
@@ -96,5 +89,10 @@ class DefaultMovieRepository(
             mutableOrigin.value = DataOrigin.CACHE
             return (cachedMovie(id) ?: throw e) to DataOrigin.CACHE
         }
+    }
+
+    private companion object {
+        const val MOVIE_ID_SEPARATOR = ","
+        const val OFFLINE_ERROR = "Offline"
     }
 }

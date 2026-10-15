@@ -17,7 +17,7 @@ public class MovieController {
   @GetMapping
   public MoviePageDto movies(
       @RequestParam(defaultValue = "now_playing") String tab,
-      @RequestParam(defaultValue = "1") @Min(1) @Max(500) int page) {
+      @RequestParam(defaultValue = "1") @Min(1) @Max(MoviePagination.MAX_PAGE) int page) {
     return tmdb.movies(MovieTab.parse(tab), page);
   }
 

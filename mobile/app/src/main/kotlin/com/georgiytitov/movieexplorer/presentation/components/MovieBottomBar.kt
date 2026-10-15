@@ -23,7 +23,9 @@ fun MovieBottomBar(
                     icon = {
                         Icon(
                             imageVector =
-                                if (favoriteTab) Icons.Outlined.FavoriteBorder else {
+                                if (favoriteTab) {
+                                    Icons.Outlined.FavoriteBorder
+                                } else {
                                     Icons.Outlined.Movie
                                 },
                             contentDescription = null,
@@ -31,7 +33,11 @@ fun MovieBottomBar(
                     },
                     label = {
                         Text(
-                            text = if (favoriteTab) Strings.FAVORITES else Strings.MOVIES,
+                            text = if (favoriteTab) {
+                                Strings.FAVORITES
+                            } else {
+                                Strings.MOVIES
+                            },
                         )
                     },
                 )

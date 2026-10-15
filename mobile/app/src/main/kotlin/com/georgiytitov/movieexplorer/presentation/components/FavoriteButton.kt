@@ -24,7 +24,9 @@ fun FavoriteButton(
                     Icons.Outlined.FavoriteBorder
                 },
                 contentDescription =
-                    if (selected) Strings.REMOVE_FROM_FAVORITES else {
+                    if (selected) {
+                        Strings.REMOVE_FROM_FAVORITES
+                    } else {
                         Strings.ADD_TO_FAVORITES
                     },
             )

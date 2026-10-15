@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import retrofit2.HttpException
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
 
 class DefaultFavoritesRepository(
     private val dao: MovieDao,
@@ -45,7 +47,7 @@ class DefaultFavoritesRepository(
                         try {
                             backend.addFavorite(userId, AddFavoriteDto(change.movieId))
                         } catch (e: HttpException) {
-                            if (e.code() != 400 ||
+                            if (e.code() != HTTP_BAD_REQUEST ||
                                 backend.favorites(userId).none { it.id == change.movieId }
                             ) {
                                 throw e
@@ -55,7 +57,7 @@ class DefaultFavoritesRepository(
                         try {
                             backend.removeFavorite(userId, change.movieId)
                         } catch (e: HttpException) {
-                            if (e.code() != 404) {
+                            if (e.code() != HTTP_NOT_FOUND) {
                                 throw e
                             }
                         }

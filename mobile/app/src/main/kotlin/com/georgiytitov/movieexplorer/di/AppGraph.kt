@@ -38,17 +38,17 @@ class AppGraph(
         .databaseBuilder(
             context,
             MovieDatabase::class.java,
-            "movies.db",
+            DATABASE_NAME,
         ).build()
     private val client = OkHttpClient
         .Builder()
-        .connectTimeout(4, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
-        .callTimeout(12, TimeUnit.SECONDS)
+        .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        .callTimeout(TMDB_CALL_TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .build()
     private val tmdbApi = Retrofit
         .Builder()
-        .baseUrl("https://api.themoviedb.org/3/")
+        .baseUrl(TMDB_BASE_URL)
         .client(
             client
                 .newBuilder()
@@ -64,8 +64,9 @@ class AppGraph(
     private val backendApi = Retrofit
         .Builder()
         .baseUrl(BuildConfig.BACKEND_URL.trimEnd('/') + "/")
-        .client(client.newBuilder().callTimeout(4, TimeUnit.SECONDS).build())
-        .addConverterFactory(GsonConverterFactory.create())
+        .client(
+            client.newBuilder().callTimeout(BACKEND_CALL_TIMEOUT_SECONDS, TimeUnit.SECONDS).build(),
+        ).addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(BackendApi::class.java)
     val movies: MovieRepository = DefaultMovieRepository(
@@ -92,5 +93,14 @@ class AppGraph(
                 favorites.synchronize()
             }
         }
+    }
+
+    private companion object {
+        const val DATABASE_NAME = "movies.db"
+        const val TMDB_BASE_URL = "https://api.themoviedb.org/3/"
+        const val CONNECT_TIMEOUT_SECONDS = 4L
+        const val READ_TIMEOUT_SECONDS = 10L
+        const val TMDB_CALL_TIMEOUT_SECONDS = 12L
+        const val BACKEND_CALL_TIMEOUT_SECONDS = 4L
     }
 }

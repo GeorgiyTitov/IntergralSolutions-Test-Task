@@ -11,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class FavoriteService {
+  private static final String DUPLICATE_FAVORITE = "Movie is already a favorite";
+  private static final String FAVORITE_NOT_FOUND = "Favorite not found";
+
   private final FavoriteRepository favorites;
   private final TmdbClient tmdb;
 
@@ -28,14 +31,14 @@ public class FavoriteService {
     try {
       favorites.save(userId, movie);
     } catch (DuplicateKeyException ex) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Movie is already a favorite");
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, DUPLICATE_FAVORITE);
     }
     return movie;
   }
 
   public void remove(UUID userId, long movieId) {
     if (!favorites.remove(userId, movieId)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Favorite not found");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, FAVORITE_NOT_FOUND);
     }
   }
 }

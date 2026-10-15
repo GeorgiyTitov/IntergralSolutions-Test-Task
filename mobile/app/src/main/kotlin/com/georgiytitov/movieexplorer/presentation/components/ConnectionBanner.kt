@@ -7,22 +7,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.georgiytitov.movieexplorer.domain.model.DataOrigin
+import com.georgiytitov.movieexplorer.presentation.resources.ConnectionStatus
 import com.georgiytitov.movieexplorer.presentation.resources.Dimensions
 import com.georgiytitov.movieexplorer.presentation.resources.Strings
 
 @Composable
-fun ConnectionBanner(
-    online: Boolean,
-    origin: DataOrigin,
-) {
-    val message =
-        when {
-            !online -> Strings.OFFLINE_MESSAGE
-            origin == DataOrigin.TMDB -> Strings.DIRECT_TMDB_MESSAGE
-            origin == DataOrigin.CACHE -> Strings.CACHED_MESSAGE
-            else -> return
-        }
+fun ConnectionBanner(connectionStatus: ConnectionStatus) {
+    val message = when (connectionStatus) {
+        ConnectionStatus.OFFLINE -> Strings.OFFLINE_MESSAGE
+        ConnectionStatus.FALLBACK -> Strings.DIRECT_TMDB_MESSAGE
+        ConnectionStatus.CACHED -> Strings.CACHED_MESSAGE
+        ConnectionStatus.CONNECTED -> return
+    }
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
         modifier = Modifier

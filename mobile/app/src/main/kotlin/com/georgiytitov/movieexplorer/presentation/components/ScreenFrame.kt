@@ -8,14 +8,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.georgiytitov.movieexplorer.domain.model.DataOrigin
+import com.georgiytitov.movieexplorer.presentation.resources.ConnectionStatus
 
 @Composable
 fun ScreenFrame(
-    isDetails: Boolean,
-    isFavorites: Boolean,
-    online: Boolean,
-    origin: DataOrigin,
+    isDetails: Boolean = false,
+    isFavorites: Boolean = false,
+    connectionStatus: ConnectionStatus,
     snackbars: SnackbarHostState,
     goBack: () -> Unit = {},
     refresh: () -> Unit = {},
@@ -32,8 +31,7 @@ fun ScreenFrame(
                         refresh = refresh,
                     )
                     ConnectionBanner(
-                        online = online,
-                        origin = origin,
+                        connectionStatus = connectionStatus,
                     )
                 },
             )

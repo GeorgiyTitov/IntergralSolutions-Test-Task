@@ -39,7 +39,7 @@ fun MoviesScreen(
             snapshotFlow {
                 listState.layoutInfo.visibleItemsInfo
                     .lastOrNull()
-                    ?.index ?: -1
+                    ?.index ?: Pagination.NO_VISIBLE_ITEM_INDEX
             }.distinctUntilChanged()
                 .collect { last ->
                     if (state.movies.isNotEmpty() &&
@@ -80,7 +80,9 @@ fun MoviesScreen(
                 state.movies.isEmpty() -> {
                     MessageContent(
                         title =
-                            if (state.error == null) Strings.NO_MOVIES else {
+                            if (state.error == null) {
+                                Strings.NO_MOVIES
+                            } else {
                                 Strings.MOVIES_UNAVAILABLE
                             },
                         message = state.error ?: Strings.EMPTY_MOVIES,

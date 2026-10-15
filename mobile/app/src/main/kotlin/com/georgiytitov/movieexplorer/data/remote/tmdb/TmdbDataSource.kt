@@ -15,15 +15,15 @@ class TmdbDataSource(
         val response = api.movies(tab.apiValue, page)
         return MoviePage(
             response.page,
-            response.totalPages.coerceAtMost(
-                500,
-            ),
-            response.results.orEmpty().map {
-                it.toDomain()
-            },
+            response.totalPages.coerceAtMost(MAX_PAGE),
+            response.results.orEmpty().map { it.toDomain() },
             DataOrigin.TMDB,
         )
     }
 
     override suspend fun movie(id: Long) = api.movie(id).toDomain() to DataOrigin.TMDB
+
+    private companion object {
+        const val MAX_PAGE = 500
+    }
 }

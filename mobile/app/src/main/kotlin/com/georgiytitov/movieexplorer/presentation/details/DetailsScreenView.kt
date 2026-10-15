@@ -11,6 +11,7 @@ import com.georgiytitov.movieexplorer.presentation.components.*
 import com.georgiytitov.movieexplorer.presentation.favorites.*
 import com.georgiytitov.movieexplorer.presentation.navigation.NavigationEvent
 import com.georgiytitov.movieexplorer.presentation.navigation.ObserveNavigationEvents
+import com.georgiytitov.movieexplorer.presentation.resources.ConnectionStatus
 
 @Composable
 fun DetailsScreenView(
@@ -34,8 +35,10 @@ fun DetailsScreenView(
         },
     )
     val favoriteState by favorites.state.collectAsStateWithLifecycle()
-    val online by graph.network.online.collectAsStateWithLifecycle()
-    val origin by graph.movies.origin.collectAsStateWithLifecycle()
+    val connectionStatus = rememberConnectionStatus(
+        graph = graph,
+    )
+    val isNetworkAvailable = connectionStatus != ConnectionStatus.OFFLINE
     val snackbars = remember(
         calculation = { SnackbarHostState() },
     )
@@ -49,13 +52,15 @@ fun DetailsScreenView(
         },
     )
     var wasOffline by remember(
-        calculation = { mutableStateOf(!online) },
+        calculation = { mutableStateOf(!isNetworkAvailable) },
     )
     LaunchedEffect(
-        key1 = online,
+        key1 = isNetworkAvailable,
         block = {
-            if (online && wasOffline) details.handleEvent(DetailsEvent.Refresh)
-            wasOffline = !online
+            if (isNetworkAvailable && wasOffline) {
+                details.handleEvent(DetailsEvent.Refresh)
+            }
+            wasOffline = !isNetworkAvailable
         },
     )
     ObserveNavigationEvents(
@@ -64,9 +69,7 @@ fun DetailsScreenView(
     )
     ScreenFrame(
         isDetails = true,
-        isFavorites = false,
-        online = online,
-        origin = origin,
+        connectionStatus = connectionStatus,
         snackbars = snackbars,
         goBack = { details.handleEvent(DetailsEvent.Back) },
         content = {

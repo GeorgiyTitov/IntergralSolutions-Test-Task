@@ -36,7 +36,7 @@ fun MovieNavHost(graph: AppGraph) {
         }
     }
     Scaffold(
-        contentWindowInsets = WindowInsets(left = 0, top = 0, right = 0, bottom = 0),
+        contentWindowInsets = WindowInsets(),
         bottomBar = {
             if (currentRoute != MovieRoute.DETAILS.path) {
                 MovieBottomBar(

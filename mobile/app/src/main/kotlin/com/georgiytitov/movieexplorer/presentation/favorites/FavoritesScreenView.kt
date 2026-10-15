@@ -26,8 +26,9 @@ fun FavoritesScreenView(
         },
     )
     val favoriteState by favorites.state.collectAsStateWithLifecycle()
-    val online by graph.network.online.collectAsStateWithLifecycle()
-    val origin by graph.movies.origin.collectAsStateWithLifecycle()
+    val connectionStatus = rememberConnectionStatus(
+        graph = graph,
+    )
     val snackbars = remember(
         calculation = { SnackbarHostState() },
     )
@@ -45,10 +46,8 @@ fun FavoritesScreenView(
         onNavigate = onNavigate,
     )
     ScreenFrame(
-        isDetails = false,
         isFavorites = true,
-        online = online,
-        origin = origin,
+        connectionStatus = connectionStatus,
         snackbars = snackbars,
         content = {
             FavoritesScreen(
