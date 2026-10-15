@@ -1,0 +1,65 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 100
+
+[*.{kt,kts}]
+ktlint_code_style = ktlint_official
+ktlint_function_naming_ignore_when_annotated_with = Composable
+# Short signatures, including annotated constructor parameters, may stay on one line.
+ktlint_standard_class-signature = disabled
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_chain_method_rule_force_multiline_when_chain_operator_count_greater_or_equal_than = 999
+ktlint_standard_no-wildcard-imports = enabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_when-entry-bracing = disabled
+ktlint_standard_if-else-bracing = enabled
+ktlint_standard_if-else-wrapping = enabled
+ktlint_standard_multiline-if-else = enabled
+ktlint_standard_function-expression-body = disabled
+ij_kotlin_call_parameters_wrap = chop_down_if_long
+ij_kotlin_method_parameters_wrap = chop_down_if_long
+ij_kotlin_call_parameters_new_line_after_left_paren = true
+ij_kotlin_call_parameters_right_paren_on_new_line = true
+ij_kotlin_align_multiline_parameters_in_calls = false
+ij_kotlin_continuation_indent_in_argument_lists = false
+ij_kotlin_keep_simple_if_on_one_line = true
+ij_kotlin_if_brace_force = always
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999
+
+[*.java]
+indent_size = 4
+ij_continuation_indent_size = 4
+ij_java_call_parameters_wrap = chop_down_if_long
+ij_java_call_parameters_new_line_after_left_paren = true
+ij_java_call_parameters_right_paren_on_new_line = true
+ij_java_align_multiline_parameters_in_calls = false
+ij_java_method_parameters_wrap = chop_down_if_long
+ij_java_method_parameters_new_line_after_left_paren = true
+ij_java_method_parameters_right_paren_on_new_line = true
+ij_java_align_multiline_parameters = false
+ij_java_record_components_wrap = chop_down_if_long
+ij_java_new_line_after_lparen_in_record_header = true
+ij_java_rparen_on_new_line_in_record_header = true
+ij_java_align_multiline_records = false
+ij_java_method_call_chain_wrap = chop_down_if_long
+ij_java_align_multiline_chained_methods = false
+ij_java_if_brace_force = always
+ij_java_for_brace_force = always
+ij_java_while_brace_force = always
+ij_java_do_while_brace_force = always
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_names_count_to_use_import_on_demand = 999
+
+[*.{md,sql}]
+max_line_length = off
+
+[*.bat]
+end_of_line = crlf
