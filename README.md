@@ -65,7 +65,6 @@ set `BACKEND_URL=http://127.0.0.1:8080/` in `.env`, and rebuild the app.
 
 See the [architecture diagram and data flow](docs/architecture.md),
 [mobile decisions and limitations](mobile/README.md), and [backend API](backend/README.md).
-Optional KMP, trailers and benchmarks are outside the current scope.
 
 ## Run automated tests
 
@@ -80,3 +79,33 @@ backend/mvnw -f backend/pom.xml verify
 
 Tests do not need TMDB credentials. Backend integration tests require Docker Desktop and use
 a disposable PostgreSQL container, separate from the development database.
+
+## Bonuses and next steps
+
+| Optional item | Status |
+| --- | --- |
+| Critical mobile unit tests | Implemented: view models, repositories and mappers |
+| Compose UI tests | Implemented: navigation actions, pagination, states and favorite retry |
+| Backend unit/integration tests | Implemented, including HTTP and PostgreSQL persistence |
+| Advanced client offline caching | Implemented: multiple pages per tab, details and poster prefetch |
+| Architecture diagram | [Components and data flow](docs/architecture.md) |
+| Launcher icon | Custom adaptive cinema icon, including Android themed icons |
+| KMP module | Not implemented |
+| Macrobenchmark | Not implemented; measure cold startup and scrolling in a dedicated module |
+| Trailer playback | Not implemented |
+| API versioning | Not implemented |
+| Backend TMDB response caching | Not implemented |
+| Idempotent favorite creation / HTTP 409 | Not implemented; duplicate favorites return 400 |
+
+Further improvements beyond the assignment:
+
+- Replace manual `AppGraph` wiring with Hilt/Koin when the dependency graph grows.
+- Split domain/data/features into Gradle modules as the application grows.
+- Add accessibility checks and broader device, screen-size and UI test coverage.
+- Add account authentication and multi-device favorite conflict resolution; the current
+  installation-local set takes precedence during synchronization.
+- Move reliable background synchronization to WorkManager and expose cache storage controls.
+- Review credential distribution and enforce HTTPS for a production deployment.
+
+The submission prioritizes the required flows and tested behavior. KMP, trailers and performance
+benchmarks are intentionally left for a further iteration.
