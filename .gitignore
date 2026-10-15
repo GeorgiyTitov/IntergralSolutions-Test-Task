@@ -1,0 +1,24 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+local.properties
+*.jks
+*.keystore
+
+# Gradle, Android, and IDE output
+.gradle/
+.kotlin/
+**/build/
+.idea/
+*.iml
+.externalNativeBuild/
+.cxx/
+captures/
+
+# macOS
+.DS_Store
+
+# Backend and local verification
+**/target/
+.work/
