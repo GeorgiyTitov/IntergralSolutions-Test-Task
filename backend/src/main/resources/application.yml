@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: movie-backend
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/movies}
+    username: ${POSTGRES_USER:movies}
+    password: ${POSTGRES_PASSWORD:movies_dev_password}
+  sql:
+    init:
+      mode: always
+  mvc:
+    problemdetails:
+      enabled: true
+tmdb:
+  token: ${TMDB_READ_ACCESS_TOKEN:}
+  api-key: ${TMDB_API_KEY:}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

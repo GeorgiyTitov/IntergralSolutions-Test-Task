@@ -19,7 +19,9 @@ class TmdbAuthenticationInterceptor(
                 .request()
                 .newBuilder()
                 .apply {
-                    if (token.isNotBlank()) header("Authorization", "Bearer $token") else {
+                    if (token.isNotBlank()) {
+                        header("Authorization", "Bearer $token")
+                    } else {
                         url(
                             chain
                                 .request()

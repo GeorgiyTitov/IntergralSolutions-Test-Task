@@ -25,8 +25,5 @@ class TmdbDataSource(
         )
     }
 
-    override suspend fun movie(id: Long) =
-        api
-            .movie(id)
-            .toDomain()
+    override suspend fun movie(id: Long) = api.movie(id).toDomain() to DataOrigin.TMDB
 }

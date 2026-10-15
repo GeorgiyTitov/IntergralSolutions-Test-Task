@@ -22,7 +22,9 @@ fun posterImageLoader(
             .readTimeout(10, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val request =
-                    if (network.online.value) chain.request() else {
+                    if (network.online.value) {
+                        chain.request()
+                    } else {
                         chain
                             .request()
                             .newBuilder()

@@ -33,7 +33,9 @@ abstract class MovieDao {
         page: MoviePageEntity,
         movies: List<MovieEntity>,
     ) {
-        if (page.page == 1) clearPages(page.category)
+        if (page.page == 1) {
+            clearPages(page.category)
+        }
         putMovies(movies)
         putPage(page)
     }

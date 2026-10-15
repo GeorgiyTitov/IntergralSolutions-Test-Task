@@ -18,7 +18,7 @@ class DefaultMovieRepository(
     private val dao: MovieDao,
     private val network: NetworkMonitor,
 ) : MovieRepository {
-    private val mutableOrigin = MutableStateFlow(DataOrigin.TMDB)
+    private val mutableOrigin = MutableStateFlow(DataOrigin.BACKEND)
     override val origin = mutableOrigin.asStateFlow()
 
     override suspend fun cachedMovies(
@@ -54,7 +54,9 @@ class DefaultMovieRepository(
         page: Int,
     ): MoviePage {
         try {
-            if (!network.online.value) throw IOException("Offline")
+            if (!network.online.value) {
+                throw IOException("Offline")
+            }
             val result = remote.movies(tab, page)
             dao.cache(
                 MoviePageEntity(
@@ -81,11 +83,13 @@ class DefaultMovieRepository(
 
     override suspend fun movie(id: Long): Pair<Movie, DataOrigin> {
         try {
-            if (!network.online.value) throw IOException("Offline")
+            if (!network.online.value) {
+                throw IOException("Offline")
+            }
             val result = remote.movie(id)
-            dao.putMovie(result.toEntity())
-            mutableOrigin.value = DataOrigin.TMDB
-            return result to mutableOrigin.value
+            dao.putMovie(result.first.toEntity())
+            mutableOrigin.value = result.second
+            return result
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
