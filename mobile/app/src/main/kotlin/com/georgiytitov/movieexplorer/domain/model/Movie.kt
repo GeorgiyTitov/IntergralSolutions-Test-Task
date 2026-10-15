@@ -1,7 +1,5 @@
 package com.georgiytitov.movieexplorer.domain.model
 
-
-
 data class Movie(
     val id: Long,
     val title: String,

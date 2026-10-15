@@ -5,7 +5,7 @@
     <application
         android:name=".MovieApplication"
         android:allowBackup="false"
-        android:label="Movie Explorer"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieExplorer">
         <activity android:name=".MainActivity" android:exported="true">

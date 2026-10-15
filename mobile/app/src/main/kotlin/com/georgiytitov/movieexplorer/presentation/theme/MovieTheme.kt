@@ -3,21 +3,24 @@ package com.georgiytitov.movieexplorer.presentation.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
-private val CinemaColors = darkColorScheme(
-    primary = Color(0xFFB9CEFF),
-    onPrimary = Color(0xFF182D57),
-    primaryContainer = Color(0xFF29426E),
-    secondary = Color(0xFFC6C5DD),
-    background = Color(0xFF101319),
-    surface = Color(0xFF101319),
-    surfaceContainer = Color(0xFF1C2028),
-    surfaceContainerHigh = Color(0xFF262B35),
-    surfaceContainerHighest = Color(0xFF313642),
-)
+private val CINEMA_COLORS =
+    darkColorScheme(
+        primary = MovieColors.PRIMARY,
+        onPrimary = MovieColors.ON_PRIMARY,
+        primaryContainer = MovieColors.PRIMARY_CONTAINER,
+        secondary = MovieColors.SECONDARY,
+        background = MovieColors.BACKGROUND,
+        surface = MovieColors.SURFACE,
+        surfaceContainer = MovieColors.SURFACE_CONTAINER,
+        surfaceContainerHigh = MovieColors.SURFACE_CONTAINER_HIGH,
+        surfaceContainerHighest = MovieColors.SURFACE_CONTAINER_HIGHEST,
+    )
 
 @Composable
 fun MovieTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = CinemaColors, content = content)
+    MaterialTheme(
+        colorScheme = CINEMA_COLORS,
+        content = content,
+    )
 }

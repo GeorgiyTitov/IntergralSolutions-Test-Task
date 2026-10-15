@@ -1,7 +1,5 @@
 package com.georgiytitov.movieexplorer.domain.model
 
-
-
 data class MoviePage(
     val page: Int,
     val totalPages: Int,

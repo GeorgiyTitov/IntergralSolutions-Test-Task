@@ -16,6 +16,16 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
         )
         val graph = (application as MovieApplication).graph
-        setContent { MovieTheme { MovieApp(graph) } }
+        setContent(
+            content = {
+                MovieTheme(
+                    content = {
+                        MovieApp(
+                            graph = graph,
+                        )
+                    },
+                )
+            },
+        )
     }
 }
