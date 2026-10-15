@@ -46,6 +46,8 @@
     <string name="sync_favorites_error">
         Favorites saved on this device. Couldn’t sync with the server.
     </string>
+    <string name="syncing_favorites">Syncing favorites…</string>
+    <string name="favorites_synced">Favorites synced</string>
     <string name="offline_message">
         You’re offline · saved movies and favorites are available
     </string>

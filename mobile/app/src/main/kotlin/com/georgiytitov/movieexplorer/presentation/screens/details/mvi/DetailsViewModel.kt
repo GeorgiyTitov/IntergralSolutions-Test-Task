@@ -3,7 +3,6 @@ package com.georgiytitov.movieexplorer.presentation.screens.details.mvi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.georgiytitov.movieexplorer.R
-import com.georgiytitov.movieexplorer.domain.model.Movie
 import com.georgiytitov.movieexplorer.domain.repository.MovieRepository
 import com.georgiytitov.movieexplorer.presentation.navigation.NavigationEvent
 import com.georgiytitov.movieexplorer.presentation.state.updateState
@@ -47,12 +46,9 @@ internal class DetailsViewModel(
                 mutableState.value = DetailsState(movie = movie, loading = false)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 mutableState.updateState {
-                    copy(
-                        loading = false,
-                        error = R.string.load_details_error,
-                    )
+                    copy(loading = false, error = R.string.load_details_error)
                 }
             }
         }

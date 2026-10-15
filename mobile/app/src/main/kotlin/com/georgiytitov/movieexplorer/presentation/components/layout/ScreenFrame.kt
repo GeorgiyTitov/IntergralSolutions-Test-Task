@@ -41,10 +41,7 @@ fun ScreenFrame(
         },
         snackbarHost = { SnackbarHost(hostState = snackbars) },
         content = { padding ->
-            Surface(
-                modifier = Modifier.padding(paddingValues = padding),
-                content = content,
-            )
+            Surface(modifier = Modifier.padding(paddingValues = padding), content = content)
         },
     )
 }

@@ -6,9 +6,7 @@ import com.georgiytitov.movieexplorer.domain.model.DataOrigin.BACKEND
 import com.georgiytitov.movieexplorer.domain.model.MoviePage
 import com.georgiytitov.movieexplorer.domain.model.MovieTab
 
-internal class BackendDataSource(
-    private val api: BackendApi,
-) : MovieDataSource {
+internal class BackendDataSource(private val api: BackendApi) : MovieDataSource {
     override suspend fun movies(
         tab: MovieTab,
         page: Int,

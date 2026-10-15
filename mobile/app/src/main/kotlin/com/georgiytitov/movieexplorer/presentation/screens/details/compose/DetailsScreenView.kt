@@ -55,10 +55,7 @@ internal fun DetailsScreenView(
             wasOffline = !isNetworkAvailable
         },
     )
-    ObserveNavigationEvents(
-        events = details.navigationEvents,
-        onNavigate = onNavigate,
-    )
+    ObserveNavigationEvents(events = details.navigationEvents, onNavigate = onNavigate)
     ScreenFrame(
         isDetails = true,
         connectionStatus = connectionStatus,

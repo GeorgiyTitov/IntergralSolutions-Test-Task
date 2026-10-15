@@ -31,8 +31,7 @@ public class FavoriteRepository {
     }
 
     public List<MovieDto> findAll(UUID userId) {
-        return jdbc.sql(SELECT_FAVORITES)
-            .param("user", userId)
+        return jdbc.sql(SELECT_FAVORITES).param("user", userId)
             .query(
                 (rs, row) ->
                     new MovieDto(
@@ -47,9 +46,7 @@ public class FavoriteRepository {
     }
 
     public void save(UUID userId, MovieDto movie) {
-        jdbc.sql(INSERT_FAVORITE)
-            .param("user", userId)
-            .param("movie", movie.id())
+        jdbc.sql(INSERT_FAVORITE).param("user", userId).param("movie", movie.id())
             .param("title", movie.title())
             .param("poster", movie.posterPath())
             .param("overview", movie.overview())
@@ -59,9 +56,6 @@ public class FavoriteRepository {
     }
 
     public boolean remove(UUID userId, long movieId) {
-        return jdbc.sql(DELETE_FAVORITE)
-            .param("user", userId)
-            .param("movie", movieId)
-            .update() > 0;
+        return jdbc.sql(DELETE_FAVORITE).param("user", userId).param("movie", movieId).update() > 0;
     }
 }

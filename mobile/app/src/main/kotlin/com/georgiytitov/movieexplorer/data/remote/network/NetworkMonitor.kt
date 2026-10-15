@@ -6,9 +6,7 @@ import android.net.NetworkCapabilities
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-internal class NetworkMonitor(
-    context: Context,
-) {
+internal class NetworkMonitor(context: Context) {
     private val manager = context.getSystemService(ConnectivityManager::class.java)
     private val mutableOnline = MutableStateFlow(isOnline())
     val online = mutableOnline.asStateFlow()

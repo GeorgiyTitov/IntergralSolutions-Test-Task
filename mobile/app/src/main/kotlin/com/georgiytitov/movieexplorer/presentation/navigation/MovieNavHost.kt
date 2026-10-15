@@ -67,21 +67,11 @@ internal fun MovieNavHost(graph: AppGraph) {
                 builder = {
                     composable(
                         route = MOVIES.path,
-                        content = {
-                            MoviesScreenView(
-                                graph = graph,
-                                onNavigate = navigate,
-                            )
-                        },
+                        content = { MoviesScreenView(graph = graph, onNavigate = navigate) },
                     )
                     composable(
                         route = FAVORITES.path,
-                        content = {
-                            FavoritesScreenView(
-                                graph = graph,
-                                onNavigate = navigate,
-                            )
-                        },
+                        content = { FavoritesScreenView(graph = graph, onNavigate = navigate) },
                     )
                     composable(
                         route = DETAILS.path,

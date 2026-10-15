@@ -1,8 +1,6 @@
 package com.georgiytitov.movieexplorer.presentation.navigation
 
-internal enum class MovieRoute(
-    val path: String,
-) {
+internal enum class MovieRoute(val path: String) {
     MOVIES("browse"),
     FAVORITES("favorites"),
     DETAILS("movie/{id}"),

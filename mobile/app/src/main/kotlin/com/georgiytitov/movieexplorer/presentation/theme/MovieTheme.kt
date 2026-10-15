@@ -18,8 +18,5 @@ private val CINEMA_COLORS = darkColorScheme(
 
 @Composable
 fun MovieTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = CINEMA_COLORS,
-        content = content,
-    )
+    MaterialTheme(colorScheme = CINEMA_COLORS, content = content)
 }

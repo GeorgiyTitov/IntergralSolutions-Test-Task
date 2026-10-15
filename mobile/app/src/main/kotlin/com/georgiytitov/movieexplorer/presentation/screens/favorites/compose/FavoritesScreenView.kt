@@ -29,10 +29,7 @@ internal fun FavoritesScreenView(
     val favoriteState by favorites.state.collectAsStateWithLifecycle()
     val connectionStatus = rememberConnectionStatus(graph = graph)
     val snackbars = remember(calculation = ::SnackbarHostState)
-    ObserveNavigationEvents(
-        events = favorites.navigationEvents,
-        onNavigate = onNavigate,
-    )
+    ObserveNavigationEvents(events = favorites.navigationEvents, onNavigate = onNavigate)
     ScreenFrame(
         isFavorites = true,
         connectionStatus = connectionStatus,

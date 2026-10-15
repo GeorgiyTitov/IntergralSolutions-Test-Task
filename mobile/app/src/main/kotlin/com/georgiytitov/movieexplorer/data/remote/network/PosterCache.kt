@@ -9,10 +9,7 @@ import okhttp3.Request
 import okio.blackholeSink
 import java.io.IOException
 
-internal class PosterCache(
-    private val client: OkHttpClient,
-    private val scope: CoroutineScope,
-) {
+internal class PosterCache(private val client: OkHttpClient, private val scope: CoroutineScope) {
     fun store(movies: List<Movie>) {
         scope.launch {
             movies.mapNotNull(Movie::posterUrl).distinct().forEach { url ->

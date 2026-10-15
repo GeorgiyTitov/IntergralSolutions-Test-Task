@@ -3,7 +3,6 @@ package com.georgiytitov.movieexplorer.presentation.screens.movies.compose
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,7 +13,6 @@ import com.georgiytitov.movieexplorer.presentation.screens.movies.compose.effect
 import com.georgiytitov.movieexplorer.presentation.screens.movies.mvi.MoviesEvent
 import com.georgiytitov.movieexplorer.presentation.screens.movies.mvi.MoviesState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoviesScreen(
     state: MoviesState,

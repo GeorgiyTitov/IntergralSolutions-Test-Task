@@ -23,10 +23,7 @@ fun Poster(
     movie: Movie,
     modifier: Modifier,
 ) {
-    var failed by remember(
-        key1 = movie.posterUrl,
-        calculation = { mutableStateOf(false) },
-    )
+    var failed by remember(key1 = movie.posterUrl, calculation = { mutableStateOf(false) })
     Surface(
         modifier = modifier,
         color = MaterialTheme.colorScheme.surfaceContainerHighest,

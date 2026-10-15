@@ -27,14 +27,8 @@ fun MessageContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = Dimensions.MEDIUM_SPACING),
         content = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-            )
+            Text(text = title, style = MaterialTheme.typography.titleLarge)
+            Text(text = message, style = MaterialTheme.typography.bodyMedium)
             if (retry != null) {
                 OutlinedButton(
                     onClick = retry,

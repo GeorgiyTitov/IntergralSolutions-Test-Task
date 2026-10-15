@@ -1,5 +1,6 @@
 package com.georgiytitov.movies.tmdb;
 
+import static com.georgiytitov.movies.tmdb.TmdbConstants.EMPTY_TEXT;
 import static java.util.Objects.requireNonNullElse;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,8 +21,8 @@ record TmdbMovie(
             id,
             title,
             posterPath,
-            requireNonNullElse(overview, ""),
-            requireNonNullElse(releaseDate, ""),
+            requireNonNullElse(overview, EMPTY_TEXT),
+            requireNonNullElse(releaseDate, EMPTY_TEXT),
             rating
         );
     }

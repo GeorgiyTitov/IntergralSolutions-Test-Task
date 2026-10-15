@@ -4,7 +4,4 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "favorites")
-internal data class FavoriteEntity(
-    @PrimaryKey val movieId: Long,
-    val savedAt: Long,
-)
+internal data class FavoriteEntity(@PrimaryKey val movieId: Long, val savedAt: Long)

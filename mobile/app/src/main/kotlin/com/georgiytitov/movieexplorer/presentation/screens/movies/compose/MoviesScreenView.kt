@@ -43,10 +43,7 @@ internal fun MoviesScreenView(
     val connectionStatus = rememberConnectionStatus(graph = graph)
     val isNetworkAvailable = connectionStatus != OFFLINE
     val snackbars = remember(calculation = ::SnackbarHostState)
-    MovieFeedback(
-        events = movies.feedbackEvents,
-        snackbars = snackbars,
-    )
+    MovieFeedback(events = movies.feedbackEvents, snackbars = snackbars)
     var wasOffline by remember(calculation = { mutableStateOf(!isNetworkAvailable) })
     LaunchedEffect(
         key1 = isNetworkAvailable,
@@ -57,10 +54,7 @@ internal fun MoviesScreenView(
             wasOffline = !isNetworkAvailable
         },
     )
-    ObserveNavigationEvents(
-        events = movies.navigationEvents,
-        onNavigate = onNavigate,
-    )
+    ObserveNavigationEvents(events = movies.navigationEvents, onNavigate = onNavigate)
     ScreenFrame(
         refreshing = state.loading && state.movies.isNotEmpty(),
         connectionStatus = connectionStatus,

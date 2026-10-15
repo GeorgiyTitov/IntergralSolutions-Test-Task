@@ -20,9 +20,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-internal class MoviesViewModel(
-    private val repository: MovieRepository,
-) : ViewModel() {
+internal class MoviesViewModel(private val repository: MovieRepository) : ViewModel() {
     private val navigation = Channel<NavigationEvent>(Channel.BUFFERED)
     val navigationEvents = navigation.receiveAsFlow()
     private val feedback = Channel<Int>(Channel.BUFFERED)
@@ -109,11 +107,7 @@ internal class MoviesViewModel(
             throw e
         } catch (e: Exception) {
             mutableState.updateState {
-                copy(
-                    loading = false,
-                    loadingMore = false,
-                    error = R.string.load_movies_error,
-                )
+                copy(loading = false, loadingMore = false, error = R.string.load_movies_error)
             }
             if (notifyResult) {
                 feedback.send(R.string.load_movies_error)

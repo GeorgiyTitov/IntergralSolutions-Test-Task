@@ -11,6 +11,11 @@ local.properties
 .kotlin/
 **/build/
 .idea/
+!mobile/.idea/
+mobile/.idea/*
+!mobile/.idea/dictionaries/
+mobile/.idea/dictionaries/*
+!mobile/.idea/dictionaries/project.xml
 *.iml
 .externalNativeBuild/
 .cxx/

@@ -1,20 +1,19 @@
 package com.georgiytitov.movieexplorer.presentation.screens.favorites.compose
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.SnackbarResult.ActionPerformed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.georgiytitov.movieexplorer.R
-import com.georgiytitov.movieexplorer.presentation.resources.Dimensions
 import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesEvent
 import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesState
+import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesSyncStatus.FAILED
+import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesSyncStatus.IDLE
+import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesSyncStatus.SYNCED
+import com.georgiytitov.movieexplorer.presentation.screens.favorites.mvi.FavoritesSyncStatus.SYNCING
 
 @Composable
 fun FavoritesFeedback(
@@ -32,23 +31,35 @@ fun FavoritesFeedback(
             }
         },
     )
-    if (state.syncFailed) {
-        Snackbar(
-            modifier = Modifier
-                .padding(
-                    horizontal = Dimensions.LARGE_SPACING,
-                    vertical = Dimensions.SMALL_SPACING,
-                ),
-            action = {
-                TextButton(
-                    onClick = { handleEvent(FavoritesEvent.RetrySync) },
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.inversePrimary,
-                    ),
-                    content = { Text(text = stringResource(id = R.string.try_again)) },
-                )
-            },
-            content = { Text(text = stringResource(id = R.string.sync_favorites_error)) },
-        )
+    val syncMessage = when (state.syncStatus) {
+        IDLE -> null
+        SYNCING -> stringResource(id = R.string.syncing_favorites)
+        SYNCED -> stringResource(id = R.string.favorites_synced)
+        FAILED -> stringResource(id = R.string.sync_favorites_error)
     }
+    val retryLabel = stringResource(id = R.string.try_again)
+    LaunchedEffect(
+        key1 = state.syncStatus,
+        block = {
+            if (syncMessage != null) {
+                val result = snackbars.showSnackbar(
+                    message = syncMessage,
+                    actionLabel = if (state.syncStatus == FAILED) {
+                        retryLabel
+                    } else {
+                        null
+                    },
+                    duration = if (state.syncStatus == SYNCING) {
+                        Indefinite
+                    } else {
+                        Short
+                    },
+                )
+                handleEvent(FavoritesEvent.DismissSyncStatus)
+                if (result == ActionPerformed) {
+                    handleEvent(FavoritesEvent.RetrySync)
+                }
+            }
+        },
+    )
 }

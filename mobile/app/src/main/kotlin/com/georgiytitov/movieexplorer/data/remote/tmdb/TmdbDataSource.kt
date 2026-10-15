@@ -6,9 +6,7 @@ import com.georgiytitov.movieexplorer.domain.model.DataOrigin.TMDB
 import com.georgiytitov.movieexplorer.domain.model.MoviePage
 import com.georgiytitov.movieexplorer.domain.model.MovieTab
 
-internal class TmdbDataSource(
-    private val api: TmdbApi,
-) : MovieDataSource {
+internal class TmdbDataSource(private val api: TmdbApi) : MovieDataSource {
     override suspend fun movies(
         tab: MovieTab,
         page: Int,

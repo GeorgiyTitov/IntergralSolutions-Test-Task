@@ -31,9 +31,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-internal class AppGraph(
-    context: Context,
-) {
+// Keep dependency declarations separate from the ordered initialisation block.
+@Suppress("JoinDeclarationAndAssignment")
+internal class AppGraph(context: Context) {
     private val scope: CoroutineScope
     val network: NetworkMonitor
     private val posterClient: OkHttpClient
