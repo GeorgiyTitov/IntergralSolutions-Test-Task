@@ -37,6 +37,7 @@ android {
         targetSdk = libs.versions.androidSdk.get().toInt()
         versionCode = libs.versions.appCode.get().toInt()
         versionName = libs.versions.appName.get()
+        testInstrumentationRunner = AppConfig.TEST_RUNNER
         buildConfigField(
             AppConfig.STRING_TYPE,
             AppConfig.TMDB_READ_ACCESS_TOKEN,
@@ -48,6 +49,14 @@ android {
             quoted(config(AppConfig.TMDB_API_KEY)),
         )
         buildConfigField(AppConfig.STRING_TYPE, AppConfig.BACKEND_URL_KEY, quoted(backendUrl))
+    }
+    testBuildType = AppConfig.UI_TEST_BUILD_TYPE
+    buildTypes {
+        create(AppConfig.UI_TEST_BUILD_TYPE) {
+            initWith(getByName(AppConfig.DEBUG_BUILD_TYPE))
+            applicationIdSuffix = AppConfig.UI_TEST_APPLICATION_SUFFIX
+            matchingFallbacks += AppConfig.DEBUG_BUILD_TYPE
+        }
     }
     buildFeatures {
         compose = true
@@ -81,4 +90,13 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     debugImplementation(libs.androidx.compose.tooling)
+    add(AppConfig.UI_TEST_IMPLEMENTATION, libs.compose.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.compose.test)
+    androidTestImplementation(libs.test.runner)
+    androidTestImplementation(libs.test.junit)
+    androidTestImplementation(libs.espresso)
+    testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockito)
 }

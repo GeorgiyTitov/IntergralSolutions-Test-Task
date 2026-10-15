@@ -3,6 +3,27 @@
 Android movie browser built with Jetpack Compose, plus a Spring Boot API and PostgreSQL.
 Browse Now Playing, Upcoming and Top Rated, open details, and save favorites offline.
 
+## Demo
+
+<table>
+  <tr>
+    <td width="280">
+      <a href="docs/movie-explorer-demo.mp4">
+        <img src="docs/movie-explorer-preview.gif" width="260"
+             alt="Movie Explorer running on an Android emulator">
+      </a>
+    </td>
+    <td>
+      <strong>A 42-second walkthrough</strong><br><br>
+      Now Playing, Upcoming and Top Rated<br>
+      Movie details and animated navigation<br>
+      Favorite sync failure, retry and successful recovery<br>
+      Offline browsing with cached posters<br><br>
+      <a href="docs/movie-explorer-demo.mp4">Full demo · MP4 · 720 × 1600</a>
+    </td>
+  </tr>
+</table>
+
 ## Run the system
 
 **Required:** Android Studio, Android SDK 37, JDK 21, Docker Desktop and a TMDB credential.
@@ -42,5 +63,20 @@ set `BACKEND_URL=http://127.0.0.1:8080/` in `.env`, and rebuild the app.
   Failures show a short snackbar; retry shows progress and its result.
 - `docker compose down` stops the services and preserves the PostgreSQL volume.
 
-See [mobile architecture and limitations](mobile/README.md) and [backend API](backend/README.md).
-Optional KMP, trailers, benchmarks and automated tests are outside the current scope.
+See the [architecture diagram and data flow](docs/architecture.md),
+[mobile decisions and limitations](mobile/README.md), and [backend API](backend/README.md).
+Optional KMP, trailers and benchmarks are outside the current scope.
+
+## Run automated tests
+
+From the repository root:
+
+```sh
+mobile/gradlew -p mobile :app:testDebugUnitTest
+# With an emulator or connected device:
+mobile/gradlew -p mobile :app:connectedUiTestAndroidTest
+backend/mvnw -f backend/pom.xml verify
+```
+
+Tests do not need TMDB credentials. Backend integration tests require Docker Desktop and use
+a disposable PostgreSQL container, separate from the development database.

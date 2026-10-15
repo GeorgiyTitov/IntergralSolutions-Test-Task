@@ -51,5 +51,20 @@ when TMDB is unavailable. `userId` identifies an installation; authentication is
 Import [the Postman collection](postman/MovieExplorer.postman_collection.json), set `baseUrl`
 if needed, and run in order. It covers list/details, favorite creation/list/removal,
 user isolation, invalid input and missing resources; a successful run cleans up its data.
-Optional automated tests, TMDB response caching, 409/idempotent handling and API versioning
-are left for a separate phase.
+Optional TMDB response caching, 409/idempotent handling and API versioning remain
+for a separate phase.
+
+## Automated tests
+
+From `backend/`:
+
+```sh
+./mvnw test     # Unit tests; Docker is not needed.
+./mvnw verify   # Unit tests and HTTP/PostgreSQL integration tests; Docker must be running.
+```
+
+Integration tests start a separate temporary PostgreSQL container and an HTTP server on a random
+port. TMDB is mocked: no API key or running development backend is needed. They check all tabs,
+pagination, input validation, upstream errors, favorite snapshots, user isolation and removal.
+The test container is removed after the run. `package` runs unit tests; integration tests run
+in `verify`, so the Docker image build does not need access to a Docker daemon.

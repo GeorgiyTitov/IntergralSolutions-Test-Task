@@ -17,6 +17,8 @@ JVM bytecode target and app versions. Gradle Wrapper and daemon JVM settings use
 
 ## Architecture and decisions
 
+See the [components and data-flow diagram](../docs/architecture.md).
+
 | Area | Responsibility / reason |
 | --- | --- |
 | `domain` | Framework-independent models and repository contracts. |
@@ -49,9 +51,29 @@ Retrofit interfaces and the `MovieDataSource` contract keep remote sources repla
 
 Favorites belong to an installation UUID; synchronization makes the server match the local set.
 There is no account login, multi-device merge or background WorkManager job.
-Offline access covers prepared/loaded content. UI text is English; optional tests, KMP,
+Offline access covers prepared/loaded content. UI text is English; optional KMP,
 trailers and benchmarks are not implemented.
 
-With more time: test view models/repositories, expand accessibility/device coverage, and add
-account-based synchronization. TMDB credentials come from build configuration and are embedded
-in the APK; a production release needs a credential distribution strategy.
+With more time: expand UI/accessibility/device coverage and add account-based synchronization.
+TMDB credentials come from build configuration and are embedded in the APK; a production release needs a credential distribution strategy.
+
+## Tests
+
+```sh
+./gradlew :app:testDebugUnitTest
+```
+
+JUnit, coroutine virtual time and test doubles cover view-model loading/retry/pagination,
+request cancellation, source fallback, DTO mapping, offline repository reads and favorite sync.
+The retry regression test verifies that an immediate failure still exposes progress on each attempt.
+Unit tests run on the JVM without an emulator, Docker or TMDB credentials.
+
+With an emulator or USB-connected Android device, run the Compose UI checks:
+
+```sh
+./gradlew :app:connectedUiTestAndroidTest
+```
+
+They check tab selection, movie/favorite actions, lazy pagination, details, empty/error states,
+and repeated favorite-sync retries. A separate `.uitest` installation, test-only application
+and local fixtures keep these tests independent of TMDB, the backend and the app's persistent database.
