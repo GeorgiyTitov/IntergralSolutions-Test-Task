@@ -1,0 +1,276 @@
+{
+  "info": {
+    "_postman_id": "63566042-d208-4dd8-af33-78073b11420c",
+    "name": "Movie Explorer API",
+    "description": "Run in order against Docker Compose. The first request creates isolated user IDs and captures a real TMDB movie ID. The happy path removes its favorite. No TMDB credentials are sent from this collection; configure them on the backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "otherUserId",
+      "value": ""
+    },
+    {
+      "key": "movieId",
+      "value": ""
+    },
+    {
+      "key": "unknownMovieId",
+      "value": "999999999"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 List movies and prepare run",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/movies?tab=now_playing&page=1"
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"userId\", pm.variables.replaceIn(\"{{$randomUUID}}\"));",
+              "pm.collectionVariables.set(\"otherUserId\", pm.variables.replaceIn(\"{{$randomUUID}}\"));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "const page = pm.response.json();",
+              "pm.test(\"A movie page is returned\", function () {",
+              "    pm.expect(page.page).to.eql(1);",
+              "    pm.expect(page.movies.length).to.be.above(0);",
+              "});",
+              "pm.collectionVariables.set(\"movieId\", page.movies[0].id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Movie details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/movies/{{movieId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Details match the chosen movie\", function () {",
+              "    pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get(\"movieId\")));",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Add favorite",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/users/{{userId}}/favorites",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"movieId\": {{movieId}}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 List saved favorites",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/users/{{userId}}/favorites"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"The saved movie is listed\", function () {",
+              "    const ids = pm.response.json().map(function (movie) { return movie.id; });",
+              "    pm.expect(ids).to.include(Number(pm.collectionVariables.get(\"movieId\")));",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Other user has no favorites",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/users/{{otherUserId}}/favorites"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"Users are isolated\", function () {",
+              "    pm.expect(pm.response.json()).to.eql([]);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Remove favorite",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/users/{{userId}}/favorites/{{movieId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Removed favorite is missing",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/users/{{userId}}/favorites/{{movieId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Invalid page",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/movies?page=0"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Missing movie ID",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/users/{{userId}}/favorites",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 Unknown movie",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/movies/{{unknownMovieId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
